@@ -33,15 +33,19 @@ app.get("/listings", async (req,res) =>{
     res.render("listings/index", { allListings });
 })
 
+//New Routes
+app.get("/listings/new", async (req,res) =>{
+    res.render("listings/new");
+})
 
 // SHOW ROUTE
 app.get("/listings/:id" , async(req,res) =>{
     let {id}= req.params;
     const listing = await Listing.findById(id);
     res.render("listings/show" , {listing})
-}
+})
 
-)
+
 async function main() {
     await mongoose.connect('mongodb://127.0.0.1:27017/WonderLustMain');
 }
