@@ -45,6 +45,13 @@ app.get("/listings/:id" , async(req,res) =>{
     res.render("listings/show" , {listing})
 })
 
+//SHOW ROUTE 
+app.post("/listings" , async(req,res) =>{
+    let listingnew = new Listing(req.body.listing);
+    await listingnew.save();
+    res.redirect("/listings")
+})
+
 
 async function main() {
     await mongoose.connect('mongodb://127.0.0.1:27017/WonderLustMain');
@@ -56,8 +63,6 @@ main()
     .catch((err) =>{
         console.log(err);
     })
-
-
 
 app.listen(port, () =>{
     console.log(`SERVER IS LISTENING ON PORT ${port}`)
