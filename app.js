@@ -67,7 +67,14 @@ app.put("/listings/:id", async(req, res) =>{
     await Listing.findByIdAndUpdate(id , {...req.body.listing})
     res.redirect(`/listings/${id}`)
 })
+ //DELETE ROUTE
 
+ app.delete("/listings/:id" , async(req,res) =>{
+    let {id} = req.params;
+    let deleted_listing = await Listing.findByIdAndDelete(id);
+    console.log(deleted_listing)
+    res.redirect("/listings");
+ })
 
 
 
