@@ -2,13 +2,15 @@ const express = require('express');
 const mongoose = require('mongoose');
 const Listing = require("./MODELS/listing.js")
 const path = require("path");
+const methodOverride  = require("method-override")
+
 const port = 8080;
 const app = express();
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"))
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }))
-
+app.use(methodOverride("_method"));
 app.get("/",(req,res)=>{
     res.send("HI I AM ROOT")
 })
@@ -45,12 +47,28 @@ app.get("/listings/:id" , async(req,res) =>{
     res.render("listings/show" , {listing})
 })
 
-//SHOW ROUTE 
+//CREATE ROUTE 
 app.post("/listings" , async(req,res) =>{
     let listingnew = new Listing(req.body.listing);
     await listingnew.save();
     res.redirect("/listings")
 })
+
+//EDIT ROUTE
+app.get("/listings/:id/edit", async (req, res) => {
+  const { id } = req.params;
+  const listing = await Listing.findById(id);
+  res.render("listings/edit", { listing }); 
+});
+
+//UPDATE ROUTE
+app.put("/listings/:id", async(req, res) =>{
+    let {id} = req.params;
+    await Listing.findByIdAndUpdate(id , {...req.body.listing})
+    res.redirect(`/listings/${id}`)
+})
+
+
 
 
 async function main() {
