@@ -1,8 +1,9 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const Listing = require("./MODELS/listing.js")
+const Listing = require("./MODELS/listing.js");
 const path = require("path");
-const methodOverride  = require("method-override")
+const methodOverride  = require("method-override");
+const ejsMate = require("ejs-mate");
 
 const port = 8080;
 const app = express();
@@ -11,6 +12,9 @@ app.set("views", path.join(__dirname, "views"))
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }))
 app.use(methodOverride("_method"));
+app.engine('ejs',ejsMate);
+
+
 app.get("/",(req,res)=>{
     res.send("HI I AM ROOT")
 })
