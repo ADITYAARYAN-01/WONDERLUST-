@@ -1,25 +1,88 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WonderLust</title>
-</head>
+<% layout("/layouts/boilerplate") %>
 
 <body>
-    <form action="/listings" method="POST">
-        <input type="text" name="listing[title]" placeholder="Enter title"><br>
-        <input type="text" name="listing[description]" placeholder="Enter description"><br>
-        <input type="text" name="listing[location]" placeholder="Enter location"><br>
-        <input type="text" name="listing[image]" placeholder="Enter image URL"><br>
-        <input type="number" name="listing[price]" placeholder="Enter price"><br>
+  <div class="row">
+    <div class="col-8 offset-2">
+      <h2 class="mb-3 text-center">Create a New Listing</h2>
 
-        <button type="submit">Create Listing</button>
+      <form method="post" action="/listings" novalidate      class="needs-validation">
+        <div class="mb-3">
+          <label for="title" class="form-label">Title</label>
+          <input 
+            type="text" 
+            name="listing[title]" 
+            placeholder="e.g., Cozy Beachfront Villa" 
+            class="form-control"
+            required
+          >
+          <div class="valid-feedback">TITLE LOOKS GOOD!!</div>
+        </div>
 
-    </form>
+        <div class="mb-3">
+          <label for="description" class="form-label">Description</label>
+          <textarea 
+            name="listing[description]" 
+            placeholder="Write a short, catchy description about your property..."
+            class="form-control"
+            rows="4"
+            required
+          ></textarea>
+          <div class="invalid-feedback">Please enter a short description</div>
+        </div>
 
+        <div class="mb-3">
+          <label for="image" class="form-label">Image URL</label>
+          <input 
+            type="text" 
+            name="listing[image]" 
+            placeholder="Paste a valid image link (e.g., https://example.com/image.jpg)" 
+            class="form-control"
+          >
+        </div>
 
+        <div class="row">
+          <div class="mb-3 col-md-8">
+            <label for="price" class="form-label">Price (in USD)</label>
+            <input 
+              name="listing[price]" 
+              placeholder="e.g., 150 per night" 
+              class="form-control"
+              min="0"
+              required
+            >
+            <div class="invalid-feedback">PLEASE ENTER A VALID PRICE</div>
+          </div>
+
+          <div class="mb-3 col-md-4">
+            <label for="country" class="form-label">Country</label>
+            <input 
+              type="text" 
+              name="listing[country]" 
+              placeholder="e.g., United States" 
+              class="form-control"
+              required
+            >
+            <div class="invalid-feedback">Country name should be valid </div>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="location" class="form-label">City / Location</label>
+          <input 
+            type="text" 
+            name="listing[location]" 
+            placeholder="e.g., Miami, Florida" 
+            class="form-control"
+            required
+          >
+          <div class="invalid-feedback">Location should be valid</div>
+        </div>
+
+        <div class="d-grid">
+          <button class="btn addbtn mb-3" type="submit">Add Listing</button>
+        </div>
+      </form>
+    </div>
+  </div>
 </body>
-
-</html>
+ 

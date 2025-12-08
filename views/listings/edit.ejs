@@ -1,28 +1,93 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WonderLust</title>
-</head>
+<% layout("/layouts/boilerplate") %>
 
 <body>
-    <form action="/listings/<%= listing._id %>?_method=PUT" method="POST">
-        <input type="text" name="listing[title]" value="<%= listing.title %>"><br>
+  <div class="row">
+    <div class="col-8 offset-2">
+      <h2 class="mb-3 text-center">Edit Listing Details</h2>
 
-        <input type="text" name="listing[description]" value="<%= listing.description %>"><br>
+      <form method="POST" action="/listings/<%= listing._id %>?_method=PUT" novalidate class="needs-validation">
+        <div class="mb-3">
+          <label for="title" class="form-label">Title</label>
+          <input 
+            type="text" 
+            name="listing[title]" 
+            value="<%= listing.title %>" 
+            placeholder="e.g., Modern Lakeside Cabin" 
+            class="form-control"
+            required
+          >
+          <div class="valid-feedback">TITLE LOOKS GOOD!!</div>
+        </div>
 
-        <input type="text" name="listing[location]" value="<%= listing.location %>"><br>
+        <div class="mb-3">
+          <label for="description" class="form-label">Description</label>
+          <textarea 
+            name="listing[description]" 
+            class="form-control" 
+            rows="4"
+            placeholder="Describe your property and its unique features..."
+            required
+          ><%= listing.description %></textarea>
+          <div class="invalid-feedback">Please enter a short description</div>
+        </div>
 
-        <input type="text" name="listing[image]" value="<%= listing.image %>"><br>
+        <div class="mb-3">
+          <label for="image" class="form-label">Image URL</label>
+          <input 
+            type="text" 
+            name="listing[image]" 
+            value="<%= listing.image %>" 
+            placeholder="Paste image URL (e.g., https://example.com/photo.jpg)" 
+            class="form-control"
+            required
+          >
+        </div>
 
-        <input type="number" name="listing[price]" value="<%= listing.price %>"><br>
+        <div class="row">
+          <div class="mb-3 col-md-8">
+            <label for="price" class="form-label">Price (in USD)</label>
+            <input  
+              name="listing[price]" 
+              value="<%= listing.price %>" 
+              placeholder="e.g., 120 per night" 
+              class="form-control"
+              min="0"
+              required
+            >
+            <div class="invalid-feedback">PLEASE ENTER A VALID PRICE</div>
+          </div>
 
+          <div class="mb-3 col-md-4">
+            <label for="country" class="form-label">Country</label>
+            <input 
+              type="text" 
+              name="listing[country]" 
+              value="<%= listing.country %>" 
+              placeholder="e.g., France" 
+              class="form-control"
+              required
+            >
+            <div class="invalid-feedback">Country name should be valid </div>
+          </div>
+        </div>
 
-        <button type="submit">UPDATE CHANGE</button>
+        <div class="mb-3">
+          <label for="location" class="form-label">City / Location</label>
+          <input 
+            type="text" 
+            name="listing[location]" 
+            value="<%= listing.location %>" 
+            placeholder="e.g., Nice, French Riviera" 
+            class="form-control"
+            required
+          >
+          <div class="invalid-feedback">Location should be valid</div>
+        </div>
 
-    </form>
+        <div class="d-grid">
+          <button class="btn addbtn mb-3" type="submit">Update Listing</button>
+        </div>
+      </form>
+    </div>
+  </div>
 </body>
-
-</html>
