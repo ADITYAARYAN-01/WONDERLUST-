@@ -6,6 +6,7 @@ const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 const wrapAsync = require("./utils/wrapAsync.js")
 const ExpressError = require("./utils/ExpressError.js")
+const {listingSchema} = require("./schema.js");
 
 const port = 8080;
 const app = express();
@@ -57,19 +58,24 @@ app.get("/listings/:id", wrapAsync(async (req, res) => {
 
 //CREATE ROUTE 
 app.post("/listings", wrapAsync(async (req, res, next) => {
-    if (!req.body.listing) {
-        throw new ExpressError(400, "SEND A VALID BODY");
+    let result = listingSchema.validate(req.body);
+    console.log(result);
+    if(result.error) {
+        throw new ExpressError(400,result.error);
     }
     let listingnew = new Listing(req.body.listing);
-    if (!listingnew.description) {
-        throw new ExpressError(400, "SEND A VALID DESCRIPTION");
-    }
-    if (!listingnew.title) {
-        throw new ExpressError(400, "SEND A VALID TITLE");
-    }
-    if (!listingnew.location) {
-        throw new ExpressError(400, "SEND A VALID LOCATION");
-    }
+    // if (!req.body.listing) {
+    //     throw new ExpressError(400, "SEND A VALID BODY");
+    // }
+    // if (!listingnew.description) {
+    //     throw new ExpressError(400, "SEND A VALID DESCRIPTION");
+    // }
+    // if (!listingnew.title) {
+    //     throw new ExpressError(400, "SEND A VALID TITLE");
+    // }
+    // if (!listingnew.location) {
+    //     throw new ExpressError(400, "SEND A VALID LOCATION");
+    // }
 
     await listingnew.save();
     res.redirect("/listings")
