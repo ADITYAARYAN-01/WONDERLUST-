@@ -20,6 +20,18 @@ app.engine('ejs', ejsMate);
 app.use(express.static(path.join(__dirname, "/public")))
 
 
+const validateListing = (req,res,next) =>{
+    let {error} = listingSchema.validate(req.body);
+    if(error) {
+        let errMsg = error.details.map((el) => el.message).join(",");
+        throw new ExpressError(400,errMsg);
+    }
+    else{
+        next();
+    }
+}
+
+
 app.get("/", (req, res) => {
     res.send("HI I AM ROOT")
 })
@@ -57,12 +69,12 @@ app.get("/listings/:id", wrapAsync(async (req, res) => {
 }))
 
 //CREATE ROUTE 
-app.post("/listings", wrapAsync(async (req, res, next) => {
-    let result = listingSchema.validate(req.body);
-    console.log(result);
-    if(result.error) {
-        throw new ExpressError(400,result.error);
-    }
+app.post("/listings",validateListing, wrapAsync(async (req, res, next) => {
+    // let result = listingSchema.validate(req.body);
+    // console.log(result);
+    // if(result.error) {
+    //     throw new ExpressError(400,result.error);
+    // }
     let listingnew = new Listing(req.body.listing);
     // if (!req.body.listing) {
     //     throw new ExpressError(400, "SEND A VALID BODY");
@@ -90,7 +102,7 @@ app.get("/listings/:id/edit", wrapAsync(async (req, res) => {
 }));
 
 //UPDATE ROUTE
-app.put("/listings/:id", wrapAsync(async (req, res) => {
+app.put("/listings/:id",validateListing, wrapAsync(async (req, res) => {
     let { id } = req.params;
     await Listing.findByIdAndUpdate(id, { ...req.body.listing })
     res.redirect(`/listings/${id}`)
