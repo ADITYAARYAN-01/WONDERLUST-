@@ -49,7 +49,7 @@ app.get("/listings/new", async (req, res) => {
 })
 
 // SHOW ROUTE
-app.get("/listings/:id",wrapAsync( async (req, res) => {
+app.get("/listings/:id", wrapAsync(async (req, res) => {
     let { id } = req.params;
     const listing = await Listing.findById(id);
     res.render("listings/show", { listing })
@@ -57,7 +57,20 @@ app.get("/listings/:id",wrapAsync( async (req, res) => {
 
 //CREATE ROUTE 
 app.post("/listings", wrapAsync(async (req, res, next) => {
+    if (!req.body.listing) {
+        throw new ExpressError(400, "SEND A VALID BODY");
+    }
     let listingnew = new Listing(req.body.listing);
+    if (!listingnew.description) {
+        throw new ExpressError(400, "SEND A VALID DESCRIPTION");
+    }
+    if (!listingnew.title) {
+        throw new ExpressError(400, "SEND A VALID TITLE");
+    }
+    if (!listingnew.location) {
+        throw new ExpressError(400, "SEND A VALID LOCATION");
+    }
+
     await listingnew.save();
     res.redirect("/listings")
 })
@@ -85,14 +98,15 @@ app.delete("/listings/:id", wrapAsync(async (req, res) => {
     res.redirect("/listings");
 }))
 
-app.all("/*splat", (req,res,next) =>{
-    next(new ExpressError(404,"Page not Found"))
+app.all("/*splat", (req, res, next) => {
+    next(new ExpressError(404, "Page not Found"))
 })
 
 app.use((err, req, res, next) => {
-    let {statusCode=500 , message="SOMETHING WENT WRONG" } =err;
-    res.status(statusCode).send(message);
-   // res.send("SomeThing went wrong")
+    let { statusCode = 500, message = "SOMETHING WENT WRONG" } = err;
+    res.status(statusCode).render("error.ejs", { message });
+    //res.status(statusCode).send(message);
+    // res.send("SomeThing went wrong")
 })
 
 async function main() {
