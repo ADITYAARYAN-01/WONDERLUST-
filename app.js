@@ -6,7 +6,7 @@ const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 const wrapAsync = require("./utils/wrapAsync.js")
 const ExpressError = require("./utils/ExpressError.js")
-const { listingSchema } = require("./schema.js");
+const { listingSchema, reviewSchema } = require("./schema.js");
 const Review = require("./MODELS/review.js")
 
 const port = 8080;
@@ -32,6 +32,16 @@ const validateListing = (req, res, next) => {
     }
 }
 
+const validateReview = (req, res, next) => {
+    let { error } = reviewSchema.validate(req.body);
+    if (error) {
+        let errMsg = error.details.map((el) => el.message).join(",");
+        throw new ExpressError(400, errMsg);
+    }
+    else {
+        next();
+    }
+}
 
 app.get("/", (req, res) => {
     res.send("HI I AM ROOT")
@@ -117,17 +127,21 @@ app.delete("/listings/:id", wrapAsync(async (req, res) => {
     res.redirect("/listings");
 }))
 
-app.all("/*splat", (req, res, next) => {
-    next(new ExpressError(404, "Page not Found"))
-})
 
 
 //review post 
-app.post("/lisitngs/:id/reviews", async (req, res) => {
-    let lisitng = await Listing.findById(req.params.id);
+app.post("/listings/:id/reviews",validateReview, wrapAsync(async (req, res) => {
+    let listing = await Listing.findById(req.params.id);
     let newReview = new Review(req.body.review);
+    listing.reviews.push(newReview);
+    await newReview.save();
+    await listing.save();
     
-})
+    // console.log("New Review Saved");
+    // res.send("New Review Saved")
+
+    res.redirect(`/listings/${listing._id}`);
+}))
 
 app.use((err, req, res, next) => {
     let { statusCode = 500, message = "SOMETHING WENT WRONG" } = err;
@@ -136,6 +150,9 @@ app.use((err, req, res, next) => {
     // res.send("SomeThing went wrong")
 })
 
+app.all("/*splat", (req, res, next) => {
+    next(new ExpressError(404, "Page not Found"))
+})
 async function main() {
     await mongoose.connect('mongodb://127.0.0.1:27017/WonderLustMain');
 }
