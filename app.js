@@ -6,7 +6,8 @@ const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 const wrapAsync = require("./utils/wrapAsync.js")
 const ExpressError = require("./utils/ExpressError.js")
-const {listingSchema} = require("./schema.js");
+const { listingSchema } = require("./schema.js");
+const Review = require("./MODELS/review.js")
 
 const port = 8080;
 const app = express();
@@ -20,13 +21,13 @@ app.engine('ejs', ejsMate);
 app.use(express.static(path.join(__dirname, "/public")))
 
 
-const validateListing = (req,res,next) =>{
-    let {error} = listingSchema.validate(req.body);
-    if(error) {
+const validateListing = (req, res, next) => {
+    let { error } = listingSchema.validate(req.body);
+    if (error) {
         let errMsg = error.details.map((el) => el.message).join(",");
-        throw new ExpressError(400,errMsg);
+        throw new ExpressError(400, errMsg);
     }
-    else{
+    else {
         next();
     }
 }
@@ -69,7 +70,7 @@ app.get("/listings/:id", wrapAsync(async (req, res) => {
 }))
 
 //CREATE ROUTE 
-app.post("/listings",validateListing, wrapAsync(async (req, res, next) => {
+app.post("/listings", validateListing, wrapAsync(async (req, res, next) => {
     // let result = listingSchema.validate(req.body);
     // console.log(result);
     // if(result.error) {
@@ -102,7 +103,7 @@ app.get("/listings/:id/edit", wrapAsync(async (req, res) => {
 }));
 
 //UPDATE ROUTE
-app.put("/listings/:id",validateListing, wrapAsync(async (req, res) => {
+app.put("/listings/:id", validateListing, wrapAsync(async (req, res) => {
     let { id } = req.params;
     await Listing.findByIdAndUpdate(id, { ...req.body.listing })
     res.redirect(`/listings/${id}`)
@@ -118,6 +119,14 @@ app.delete("/listings/:id", wrapAsync(async (req, res) => {
 
 app.all("/*splat", (req, res, next) => {
     next(new ExpressError(404, "Page not Found"))
+})
+
+
+//review post 
+app.post("/lisitngs/:id/reviews", async (req, res) => {
+    let lisitng = await Listing.findById(req.params.id);
+    let newReview = new Review(req.body.review);
+    
 })
 
 app.use((err, req, res, next) => {

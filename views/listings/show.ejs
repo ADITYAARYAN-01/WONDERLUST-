@@ -29,5 +29,22 @@
                     <button class="btn btn-dark offset-7">DELETE</button>
                 </form>
             </div>
+            <br/>
+            <hr/>
+            <div class="col-8 offset-3 mb-3 mt-3">
+                <h4>Leave a Review</h4>
+                <form action="/listings/<%= listing.id %>/reviews" method="post">
+                    <div>
+                        <label for="rating" class="form-label">RATING</label>
+                        <input type="range" min="1" max="5" id="rating", name="review[rating]">
+                    </div>
+                    <div>
+                        <label for="comment" class="form-label">Comments</label>
+                        <textarea name="review[comment]" id="comment" cols="5" rows="5" class="form-control"></textarea>
+                    </div>
+                    <br/>
+                    <button class="btn btn-dark col-8 offset-2">Submit</button>
+                </form>
+            </div>
         </div>
-    </body> 
+    </body>
