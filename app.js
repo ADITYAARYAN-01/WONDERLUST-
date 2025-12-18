@@ -130,18 +130,28 @@ app.delete("/listings/:id", wrapAsync(async (req, res) => {
 
 
 //review post 
-app.post("/listings/:id/reviews",validateReview, wrapAsync(async (req, res) => {
+app.post("/listings/:id/reviews", validateReview, wrapAsync(async (req, res) => {
     let listing = await Listing.findById(req.params.id);
     let newReview = new Review(req.body.review);
     listing.reviews.push(newReview);
     await newReview.save();
     await listing.save();
-    
+
     // console.log("New Review Saved");
     // res.send("New Review Saved")
 
     res.redirect(`/listings/${listing._id}`);
 }))
+
+//delete review route
+app.delete("/listings/:id/reviews/:reviewId", wrapAsync(async (req, res) => {
+    let { id, reviewId } = req.params;
+    await Review.findByIdAndDelete(reviewId);
+    await Listing.findByIdAndUpdate(id, { $pull: { reviews: reviewId } });
+    res.redirect(`/listings/${id}`)
+
+}))
+
 
 app.use((err, req, res, next) => {
     let { statusCode = 500, message = "SOMETHING WENT WRONG" } = err;
