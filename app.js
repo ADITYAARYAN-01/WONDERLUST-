@@ -1,14 +1,15 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const Listing = require("./MODELS/listing.js");
+//const Listing = require("./MODELS/listing.js");
 const path = require("path");
 const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
-const wrapAsync = require("./utils/wrapAsync.js")
+//const wrapAsync = require("./utils/wrapAsync.js")
 const ExpressError = require("./utils/ExpressError.js")
-const { listingSchema, reviewSchema } = require("./schema.js");
-const Review = require("./MODELS/review.js")
+//const { listingSchema, reviewSchema } = require("./schema.js");
+//const Review = require("./MODELS/review.js")
 const listings = require("./routes/listing.js")
+const review = require("./routes/review.js")
 
 
 const port = 8080;
@@ -37,16 +38,6 @@ main()
 
 
 
-const validateReview = (req, res, next) => {
-    let { error } = reviewSchema.validate(req.body);
-    if (error) {
-        let errMsg = error.details.map((el) => el.message).join(",");
-        throw new ExpressError(400, errMsg);
-    }
-    else {
-        next();
-    }
-}
 
 app.get("/", (req, res) => {
     res.send("HI I AM ROOT")
@@ -55,7 +46,7 @@ app.get("/", (req, res) => {
 
 
 app.use("/listings", listings);
-
+app.use("/listings/:id/reviews",review)
 
 // app.get("/testListings",async(req,res) =>{
 //     let samplelisting = new Listing({
@@ -75,28 +66,11 @@ app.use("/listings", listings);
 
 
 //review post 
-app.post("/listings/:id/reviews", validateReview, wrapAsync(async (req, res) => {
-    let listing = await Listing.findById(req.params.id);
-    let newReview = new Review(req.body.review);
-    listing.reviews.push(newReview);
-    await newReview.save();
-    await listing.save();
 
-    // console.log("New Review Saved");
-    // res.send("New Review Saved")
 
-    res.redirect(`/listings/${listing._id}`);
-}))
-
-//delete review route
-app.delete("/listings/:id/reviews/:reviewId", wrapAsync(async (req, res) => {
-    let { id, reviewId } = req.params;
-    await Review.findByIdAndDelete(reviewId);
-    await Listing.findByIdAndUpdate(id, { $pull: { reviews: reviewId } });
-    res.redirect(`/listings/${id}`)
-
-}))
-
+app.all("/*splat", (req, res, next) => {
+    next(new ExpressError(404, "Page not Found"))
+})
 
 app.use((err, req, res, next) => {
     let { statusCode = 500, message = "SOMETHING WENT WRONG" } = err;
@@ -105,9 +79,6 @@ app.use((err, req, res, next) => {
     // res.send("SomeThing went wrong")
 })
 
-app.all("/*splat", (req, res, next) => {
-    next(new ExpressError(404, "Page not Found"))
-})
 
 app.listen(port, () => {
     console.log(`SERVER IS LISTENING ON PORT ${port}`)
