@@ -8,6 +8,8 @@ const wrapAsync = require("./utils/wrapAsync.js")
 const ExpressError = require("./utils/ExpressError.js")
 const { listingSchema, reviewSchema } = require("./schema.js");
 const Review = require("./MODELS/review.js")
+const listings = require("./routes/listing.js")
+
 
 const port = 8080;
 const app = express();
@@ -21,16 +23,19 @@ app.engine('ejs', ejsMate);
 app.use(express.static(path.join(__dirname, "/public")))
 
 
-const validateListing = (req, res, next) => {
-    let { error } = listingSchema.validate(req.body);
-    if (error) {
-        let errMsg = error.details.map((el) => el.message).join(",");
-        throw new ExpressError(400, errMsg);
-    }
-    else {
-        next();
-    }
+async function main() {
+    await mongoose.connect('mongodb://127.0.0.1:27017/WonderLustMain');
 }
+main()
+    .then(c => {
+        console.log("Connected Successfully");
+    })
+    .catch((err) => {
+        console.log(err);
+    })
+
+
+
 
 const validateReview = (req, res, next) => {
     let { error } = reviewSchema.validate(req.body);
@@ -47,6 +52,11 @@ app.get("/", (req, res) => {
     res.send("HI I AM ROOT")
 })
 
+
+
+app.use("/listings", listings);
+
+
 // app.get("/testListings",async(req,res) =>{
 //     let samplelisting = new Listing({
 //         title : "NEW HOME",
@@ -61,71 +71,6 @@ app.get("/", (req, res) => {
 //     res.send("successful testing")
 // })
 
-
-app.get("/listings", wrapAsync(async (req, res) => {
-    const allListings = await Listing.find({});
-    res.render("listings/index", { allListings });
-}))
-
-//New Routes
-app.get("/listings/new", async (req, res) => {
-    res.render("listings/new");
-})
-
-// SHOW ROUTE
-app.get("/listings/:id", wrapAsync(async (req, res) => {
-    let { id } = req.params;
-    const listing = await Listing.findById(id).populate("reviews");
-    res.render("listings/show", { listing })
-}))
-
-//CREATE ROUTE 
-app.post("/listings", validateListing, wrapAsync(async (req, res, next) => {
-    // let result = listingSchema.validate(req.body);
-    // console.log(result);
-    // if(result.error) {
-    //     throw new ExpressError(400,result.error);
-    // }
-    let listingnew = new Listing(req.body.listing);
-    // if (!req.body.listing) {
-    //     throw new ExpressError(400, "SEND A VALID BODY");
-    // }
-    // if (!listingnew.description) {
-    //     throw new ExpressError(400, "SEND A VALID DESCRIPTION");
-    // }
-    // if (!listingnew.title) {
-    //     throw new ExpressError(400, "SEND A VALID TITLE");
-    // }
-    // if (!listingnew.location) {
-    //     throw new ExpressError(400, "SEND A VALID LOCATION");
-    // }
-
-    await listingnew.save();
-    res.redirect("/listings")
-})
-);
-
-//EDIT ROUTE
-app.get("/listings/:id/edit", wrapAsync(async (req, res) => {
-    const { id } = req.params;
-    const listing = await Listing.findById(id);
-    res.render("listings/edit", { listing });
-}));
-
-//UPDATE ROUTE
-app.put("/listings/:id", validateListing, wrapAsync(async (req, res) => {
-    let { id } = req.params;
-    await Listing.findByIdAndUpdate(id, { ...req.body.listing })
-    res.redirect(`/listings/${id}`)
-}))
-//DELETE ROUTE
-
-app.delete("/listings/:id", wrapAsync(async (req, res) => {
-    let { id } = req.params;
-    let deleted_listing = await Listing.findByIdAndDelete(id);
-    console.log(deleted_listing)
-    res.redirect("/listings");
-}))
 
 
 
@@ -163,16 +108,6 @@ app.use((err, req, res, next) => {
 app.all("/*splat", (req, res, next) => {
     next(new ExpressError(404, "Page not Found"))
 })
-async function main() {
-    await mongoose.connect('mongodb://127.0.0.1:27017/WonderLustMain');
-}
-main()
-    .then(c => {
-        console.log("Connected Successfully");
-    })
-    .catch((err) => {
-        console.log(err);
-    })
 
 app.listen(port, () => {
     console.log(`SERVER IS LISTENING ON PORT ${port}`)
