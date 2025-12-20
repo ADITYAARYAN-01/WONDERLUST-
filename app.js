@@ -1,13 +1,9 @@
 const express = require('express');
 const mongoose = require('mongoose');
-//const Listing = require("./MODELS/listing.js");
 const path = require("path");
 const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
-//const wrapAsync = require("./utils/wrapAsync.js")
 const ExpressError = require("./utils/ExpressError.js")
-//const { listingSchema, reviewSchema } = require("./schema.js");
-//const Review = require("./MODELS/review.js")
 const listings = require("./routes/listing.js")
 const review = require("./routes/review.js")
 
@@ -36,36 +32,13 @@ main()
     })
 
 
-
-
-
 app.get("/", (req, res) => {
     res.send("HI I AM ROOT")
 })
 
 
-
 app.use("/listings", listings);
 app.use("/listings/:id/reviews",review)
-
-// app.get("/testListings",async(req,res) =>{
-//     let samplelisting = new Listing({
-//         title : "NEW HOME",
-//         description : "SDDSSDSDDSCSDC",
-//         price : 2000,
-//         location : "SCDSScs",
-//         country:"INDIA"
-//     });
-
-//     await samplelisting.save();
-//     console.log("SAMPLE WAS SAVED");
-//     res.send("successful testing")
-// })
-
-
-
-
-//review post 
 
 
 app.all("/*splat", (req, res, next) => {
