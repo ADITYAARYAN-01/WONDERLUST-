@@ -48,8 +48,6 @@ app.all("/*splat", (req, res, next) => {
 app.use((err, req, res, next) => {
     let { statusCode = 500, message = "SOMETHING WENT WRONG" } = err;
     res.status(statusCode).render("error.ejs", { message });
-    //res.status(statusCode).send(message);
-    // res.send("SomeThing went wrong")
 })
 
 
