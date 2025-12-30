@@ -19,6 +19,14 @@ app.use(
 );
 app.use(flash())
 
+
+//created Middleware for messages to be flashed
+app.use((req,res,next) =>{
+    res.locals.successMsg= req.flash("success");
+    res.locals.errorMsg = req.flash("error");
+    next();
+})
+
 app.get("/register", (req, res) => {
     let { name = "anonymous" } = req.query;
     req.session.name = name;
@@ -33,8 +41,6 @@ app.get("/register", (req, res) => {
 
 app.get("/hello", (req, res) => {
     // console.log(req.flash('success'));
-    res.locals.successMsg= req.flash("success");
-    res.locals.errorMsg = req.flash("error")
     res.render("page.ejs", { name: req.session.name });
 })
 
