@@ -1,11 +1,16 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const router = express.Router({mergeParams:true})
 const path = require("path");
 const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 const ExpressError = require("./utils/ExpressError.js")
-const listings = require("./routes/listing.js")
-const review = require("./routes/review.js")
+
+const listingRouter = require("./routes/listing.js")
+const reviewRouter = require("./routes/review.js")
+const userRouter = require("./routes/user.js")
+
+
 const session = require("express-session")
 const flash = require("connect-flash")
 const passport = require("passport");
@@ -82,8 +87,9 @@ app.get("/demouser" , async(req,res) =>{
    res.send(registeredUser)
 })
 
-app.use("/listings", listings);
-app.use("/listings/:id/reviews", review)
+app.use("/listings", listingRouter);
+app.use("/listings/:id/reviews", reviewRouter)
+app.use("/", userRouter);
 
 
 app.all("/*splat", (req, res, next) => {
