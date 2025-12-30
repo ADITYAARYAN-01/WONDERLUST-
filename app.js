@@ -6,6 +6,7 @@ const ejsMate = require("ejs-mate");
 const ExpressError = require("./utils/ExpressError.js")
 const listings = require("./routes/listing.js")
 const review = require("./routes/review.js")
+const session = require("express-session")
 
 
 const port = 8080;
@@ -19,6 +20,15 @@ app.engine('ejs', ejsMate);
 
 app.use(express.static(path.join(__dirname, "/public")))
 
+const sessionOptions = {
+    secret:"Mysupersecretcode",
+    resave:false,
+    saveUninitialized : true,
+}
+
+app.use(
+    session(sessionOptions)
+)
 
 async function main() {
     await mongoose.connect('mongodb://127.0.0.1:27017/WonderLustMain');
@@ -38,7 +48,7 @@ app.get("/", (req, res) => {
 
 
 app.use("/listings", listings);
-app.use("/listings/:id/reviews",review)
+app.use("/listings/:id/reviews", review)
 
 
 app.all("/*splat", (req, res, next) => {
