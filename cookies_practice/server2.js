@@ -22,14 +22,20 @@ app.use(flash())
 app.get("/register", (req, res) => {
     let { name = "anonymous" } = req.query;
     req.session.name = name;
-    // res.send(name);
-    req.flash("success", "USER REGISTERED SUCCESSFULLY")
+    if (name === "anonymous") {
+        req.flash("error", "USER NAME NOT DEFINED")
+    }
+    else {
+        req.flash("success", "USER REGISTERED SUCCESSFULLY")
+    }
     res.redirect("/hello")
 });
 
 app.get("/hello", (req, res) => {
-    console.log(req.flash('success'));
-    res.render("page.ejs", { name: req.session.name, msg: req.flash("success") })
+    // console.log(req.flash('success'));
+    res.locals.successMsg= req.flash("success");
+    res.locals.errorMsg = req.flash("error")
+    res.render("page.ejs", { name: req.session.name });
 })
 
 app.get("/reqcount", (req, res) => {
@@ -48,9 +54,9 @@ app.get("/test", (req, res) => {
 
 app.listen(port, () => {
     console.log(`server is listening on ${port}`)
-}) 
+})
 
- 
+
 
 
 
