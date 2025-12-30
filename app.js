@@ -21,9 +21,16 @@ app.engine('ejs', ejsMate);
 app.use(express.static(path.join(__dirname, "/public")))
 
 const sessionOptions = {
-    secret:"Mysupersecretcode",
-    resave:false,
-    saveUninitialized : true,
+    secret: "Mysupersecretcode",
+    resave: false,
+    saveUninitialized: true,
+    // setting expiry date 
+    cookie: {
+        // 1 week in millisecond = 7 * 24 * 60 * 60 * 1000
+        expires: Date.now() + 7 * 24 * 60 * 60 * 1000,
+        maxAge : 7 * 24 * 60 * 60 * 1000,
+        httpOnly:true,
+    }
 }
 
 app.use(
