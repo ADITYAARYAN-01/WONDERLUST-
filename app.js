@@ -7,7 +7,7 @@ const ExpressError = require("./utils/ExpressError.js")
 const listings = require("./routes/listing.js")
 const review = require("./routes/review.js")
 const session = require("express-session")
-
+const flash = require("connect-flash")
 
 const port = 8080;
 const app = express();
@@ -33,9 +33,10 @@ const sessionOptions = {
     }
 }
 
-app.use(
+app.use( 
     session(sessionOptions)
 )
+app.use(flash())
 
 async function main() {
     await mongoose.connect('mongodb://127.0.0.1:27017/WonderLustMain');
@@ -53,6 +54,11 @@ app.get("/", (req, res) => {
     res.send("HI I AM ROOT")
 })
 
+app.use((req,res,next) =>{
+    res.locals.success = req.flash("success");
+    res.locals.error = req.flash("error");
+    next();
+})
 
 app.use("/listings", listings);
 app.use("/listings/:id/reviews", review)
