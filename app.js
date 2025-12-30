@@ -8,6 +8,10 @@ const listings = require("./routes/listing.js")
 const review = require("./routes/review.js")
 const session = require("express-session")
 const flash = require("connect-flash")
+const passport = require("passport");
+const LocalStrategy = require("passport-local");
+const User = require("./MODELS/user.js");
+
 
 const port = 8080;
 const app = express();
@@ -38,6 +42,14 @@ app.use(
 )
 app.use(flash())
 
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
+
 async function main() {
     await mongoose.connect('mongodb://127.0.0.1:27017/WonderLustMain');
 }
@@ -58,6 +70,16 @@ app.use((req,res,next) =>{
     res.locals.success = req.flash("success");
     res.locals.error = req.flash("error");
     next();
+})
+
+
+app.get("/demouser" , async(req,res) =>{
+    let fakeuser = new User({
+        email:"bandar123@gmail.com",
+        username : "Delta-Student"
+    })
+   let registeredUser = await User.register(fakeuser,"helloworld")
+   res.send(registeredUser)
 })
 
 app.use("/listings", listings);
