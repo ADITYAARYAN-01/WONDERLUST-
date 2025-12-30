@@ -55,7 +55,7 @@ router.get("/:id/edit", wrapAsync(async (req, res) => {
     if(!listing){
         req.flash("error","listing does not exist");
         return res.redirect("/listings")
-    }
+    } 
     res.render("listings/edit", { listing });
 }));
 
