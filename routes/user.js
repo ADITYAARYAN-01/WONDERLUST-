@@ -20,4 +20,9 @@ router.post("/signup", wrapAsync(async (req, res) => {
         res.redirect("/signup")
     }
 }))
+
+// for login
+router.get("/login" ,(req,res) =>{
+    res.render("users/login.ejs")
+})
 module.exports = router
