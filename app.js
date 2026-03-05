@@ -75,17 +75,17 @@ app.use((req,res,next) =>{
     res.locals.success = req.flash("success");
     res.locals.error = req.flash("error");
     next();
-})
+}) 
 
 
-app.get("/demouser",async (req,res) =>{
-    let fakeUser = new User({
-        email : "abcdxyz@gmail.com",
-        username : "delta-student-11-1"
-    });
-    let registeredUser = await User.register(fakeUser, "HelloWorld");
-    res.send(registeredUser);
-});
+// app.get("/demouser",async (req,res) =>{
+//     let fakeUser = new User({
+//         email : "abcdxyz@gmail.com",
+//         username : "delta-student-11-1"
+//     });
+//     let registeredUser = await User.register(fakeUser, "HelloWorld");
+//     res.send(registeredUser);
+// });
 
 
 app.use("/listings", listingRouter);
@@ -107,28 +107,6 @@ app.listen(port, () => {
     console.log(`SERVER IS LISTENING ON PORT ${port}`)
 })
 //
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
