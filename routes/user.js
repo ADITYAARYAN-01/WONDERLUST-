@@ -37,4 +37,16 @@ router.post(
         req.flash("success" , "Welcome to Wonderlust You are logged in")
         res.redirect("/listings")
     })
+
+//logout
+
+router.get("/logout", (req,res,next)=>{
+    res.logout((err)=>{
+        if(err){
+            next(err); 
+        }
+        req.flash("success", "YOU ARE NOW LOGGED OUT!!" )
+        res.redirect("/listings");
+    })
+})
 module.exports = router
