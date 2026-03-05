@@ -45,9 +45,9 @@ const sessionOptions = {
 app.use( 
     session(sessionOptions)
 )
-app.use(flash())
+app.use(flash()) ;
 
-app.use(passport.initialize());
+app.use(passport.initialize());// it is a middleware that initialize the passport
 app.use(passport.session());
 
 passport.use(new LocalStrategy(User.authenticate()));
