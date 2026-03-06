@@ -5,17 +5,8 @@ const wrapAsync = require("../utils/wrapAsync.js")
 const ExpressError = require("../utils/ExpressError.js")
 const router = express.Router({ mergeParams: true });
 const Listing = require("../MODELS/listing.js");
+const {validateReview} = require("../middleware.js")
 
-const validateReview = (req, res, next) => {
-    let { error } = reviewSchema.validate(req.body);
-    if (error) {
-        let errMsg = error.details.map((el) => el.message).join(",");
-        throw new ExpressError(400, errMsg);
-    }
-    else {
-        next();
-    }
-}
 
 router.post("/", validateReview, wrapAsync(async (req, res) => {
     let listing = await Listing.findById(req.params.id);
