@@ -11,15 +11,27 @@
                 <img src=<%=listing.image %> class="card-img-top show-img" alt="listing-image">
                 <div class="card-body">
                     <p class="card-text">
-                        <br>
-                        <%= listing.description %>
-                            <br>
-                            &#8377;<%= listing.price.toLocaleString("en-IN") %>
-                                <br>
-                                <%= listing.location %>
-                                    <br>
-                                    <%= listing.country %>
+                        Owned by 
+                        <i>
+                            <%= listing.owner.username %>
+                        </i>
+
                     </p>
+                    <p class="card-text">
+                        <%= listing.description %>
+                    </p>
+
+                    <p class="card-text">
+                        &#8377;<%= listing.price.toLocaleString("en-IN") %>
+                    </p>
+
+                    <p class="card-text">
+                        <%= listing.location %>
+
+                    </p>
+                    <p class="card-text"></p>
+                    <%= listing.country %>
+                        </p>
                 </div>
             </div>
             <br />
@@ -41,11 +53,11 @@
                     </div>
                     <div>
                         <label for="comment" class="form-label">Comments</label>
-                        <textarea name="review[comment]" id="comment" cols="5" rows="5" class="form-control", required>
+                        <textarea name="review[comment]" id="comment" cols="5" rows="5" class="form-control" , required>
                         </textarea>
                         <div class="invalid-feedback">
                             please submit some comments for review
-                        </div> 
+                        </div>
                     </div>
                     <br />
                     <button class="btn btn-dark col-8 offset-2">Submit</button>
@@ -55,7 +67,7 @@
                 <h4>All Reviews</h4>
                 <div class="row">
                     <% for( review of listing.reviews ) { %>
-                        <div class="card col-5 mb-3 ms-3" >
+                        <div class="card col-5 mb-3 ms-3">
                             <div class="card-body">
                                 <h5 class="card-title">Joe Pollen</h5>
                                 <p class="card-text">
@@ -65,8 +77,10 @@
                                     <%= review.rating%> stars
                                 </p>
                             </div>
-                            <form method="post" action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE" class="mb-3">
-                                <button class="btn btn-dark btn-sm" >DELETE</button>
+                            <form method="post"
+                                action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE"
+                                class="mb-3">
+                                <button class="btn btn-dark btn-sm">DELETE</button>
                             </form>
                         </div>
                         <% } %>

@@ -13,9 +13,18 @@ main()
         console.log(err);
     })
 
-const initDB = async () =>{
+const initDB = async () => {
     await Listing.deleteMany({});
-    await Listing.insertMany(initdata.data);
-    console.log("DATA WAS INITIALIIZED");
+
+    // 1. Create the new array with the owner added
+    const updatedData = initdata.data.map((obj) => ({
+        ...obj, 
+        owner: "69aa0bc076838f5350a8c51c"
+    }));
+
+    // 2. Insert the NEW updated array
+    await Listing.insertMany(updatedData);
+    
+    console.log("DATA WAS INITIALIZED WITH OWNER");
 };
 initDB();
