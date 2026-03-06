@@ -50,7 +50,7 @@ router.post("/",isLoggedIn, validateListing, wrapAsync(async (req, res, next) =>
 );
 
 //EDIT ROUTE
-router.get("/:id/edit", wrapAsync(async (req, res) => {
+router.get("/:id/edit",isLoggedIn, wrapAsync(async (req, res) => {
     const { id } = req.params;
     const listing = await Listing.findById(id);
     if(!listing){
