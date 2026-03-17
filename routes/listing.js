@@ -7,6 +7,8 @@ const { listingSchema, reviewSchema } = require("../schema.js");
 const { isLoggedIn, isOwner, validateListing } = require("../middleware.js")
 const router = express.Router();
 const listingController = require("../controllers/listing.js");
+const multer  = require('multer')
+const upload = multer({ dest: 'uploads/' })
 
 // using router.route() method because it  allows you to create a single chain for a specific path and then attach different HTTP methods (GET, POST, PUT, DELETE) to it.
 
@@ -16,8 +18,12 @@ router.route("/")
     //INDEX ROUTE
     .get(wrapAsync(listingController.index))
 
-    //Create Route
-    .post(isLoggedIn, validateListing, wrapAsync(listingController.createListing));
+    // //Create Route
+    // .post(isLoggedIn, validateListing, wrapAsync(listingController.createListing));
+
+    .post(upload.single('listing[image]') , (req,res) =>{
+        res.send(req.file);
+    })
 
 
 //New Routes
