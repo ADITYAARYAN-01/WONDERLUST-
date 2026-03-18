@@ -5,7 +5,7 @@
     <div class="col-8 offset-2">
       <h2 class="mb-3 text-center">Edit Listing Details</h2>
 
-      <form method="POST" action="/listings/<%= listing._id %>?_method=PUT" novalidate class="needs-validation">
+      <form method="POST" action="/listings/<%= listing._id %>?_method=PUT" novalidate class="needs-validation" enctype="multipart/form-data">
         <div class="mb-3">
           <label for="title" class="form-label">Title</label>
           <input 
@@ -32,14 +32,11 @@
         </div>
 
         <div class="mb-3">
-          <label for="image" class="form-label">Image URL</label>
+          <label for="image" class="form-label">Upload new Image</label>
           <input 
-            type="text" 
+            type="file" 
             name="listing[image]" 
-            value="<%= listing.image %>" 
-            placeholder="Paste image URL (e.g., https://example.com/photo.jpg)" 
             class="form-control"
-            required
           >
         </div>
 
