@@ -104,3 +104,11 @@ body{
 .btns{
     display: flex;
 }
+#map {
+    height: 400px;
+    width: 100%;
+    border-radius: 15px; /* Makes it look clean like Airbnb */
+}
+.card-text {
+    text-transform: capitalize;
+}

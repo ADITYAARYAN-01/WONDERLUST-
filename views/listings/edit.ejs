@@ -8,68 +8,32 @@
       <form method="POST" action="/listings/<%= listing._id %>?_method=PUT" novalidate class="needs-validation" enctype="multipart/form-data">
         <div class="mb-3">
           <label for="title" class="form-label">Title</label>
-          <input 
-            type="text" 
-            name="listing[title]" 
-            value="<%= listing.title %>" 
-            placeholder="e.g., Modern Lakeside Cabin" 
-            class="form-control"
-            required
-          >
-          <div class="valid-feedback">TITLE LOOKS GOOD!!</div>
+          <input type="text" name="listing[title]" value="<%= listing.title %>" class="form-control" required>
         </div>
 
         <div class="mb-3">
           <label for="description" class="form-label">Description</label>
-          <textarea 
-            name="listing[description]" 
-            class="form-control" 
-            rows="4"
-            placeholder="Describe your property and its unique features..."
-            required
-          ><%= listing.description %></textarea>
-          <div class="invalid-feedback">Please enter a short description</div>
+          <textarea name="listing[description]" class="form-control" rows="4" required><%= listing.description %></textarea>
         </div>
 
         <div class="mb-3">
           <p>Original Listing Image</p> 
-          <img src="<%= originalImageUrl %>" alt="">
+          <img src="<%= originalImageUrl %>" class="img-thumbnail" style="height: 200px;" alt="">
         </div>
 
         <div class="mb-3">
           <label for="image" class="form-label">Upload new Image</label>
-          <input 
-            type="file" 
-            name="listing[image]" 
-            class="form-control"
-          >
+          <input type="file" name="listing[image]" class="form-control">
         </div>
 
         <div class="row">
           <div class="mb-3 col-md-8">
             <label for="price" class="form-label">Price (in USD)</label>
-            <input  
-              name="listing[price]" 
-              value="<%= listing.price %>" 
-              placeholder="e.g., 120 per night" 
-              class="form-control"
-              min="0"
-              required
-            >
-            <div class="invalid-feedback">PLEASE ENTER A VALID PRICE</div>
+            <input name="listing[price]" value="<%= listing.price %>" class="form-control" min="0" required>
           </div>
-
           <div class="mb-3 col-md-4">
             <label for="country" class="form-label">Country</label>
-            <input 
-              type="text" 
-              name="listing[country]" 
-              value="<%= listing.country %>" 
-              placeholder="e.g., France" 
-              class="form-control"
-              required
-            >
-            <div class="invalid-feedback">Country name should be valid </div>
+            <input type="text" name="listing[country]" value="<%= listing.country %>" class="form-control" required>
           </div>
         </div>
 
@@ -78,13 +42,18 @@
           <input 
             type="text" 
             name="listing[location]" 
+            id="location-input" 
             value="<%= listing.location %>" 
-            placeholder="e.g., Nice, French Riviera" 
-            class="form-control"
+            class="form-control" 
             required
           >
-          <div class="invalid-feedback">Location should be valid</div>
+          <div id="map-preview" style="height: 300px; width: 100%; border-radius: 10px; margin-top: 10px; border: 1px solid #ddd;"></div>
+          <small class="text-muted">Drag the marker if the location is slightly off.</small>
         </div>
+
+        <input type="hidden" name="listing[geometry][coordinates][0]" id="lng-input" value="<%= listing.geometry.coordinates[0] %>">
+        <input type="hidden" name="listing[geometry][coordinates][1]" id="lat-input" value="<%= listing.geometry.coordinates[1] %>">
+        <input type="hidden" name="listing[geometry][type]" value="Point">
 
         <div class="d-grid">
           <button class="btn addbtn mb-3" type="submit">Update Listing</button>
@@ -92,5 +61,11 @@
       </form>
     </div>
   </div>
-  <script src="/js/script.js"></script>
+
+  <script>
+    const mapToken = "<%= process.env.MAP_TOKEN %>";
+    // We pass the current listing object so the JS knows where to start the map
+    const listing = <%- JSON.stringify(listing) %>;
+  </script>
+  <script src="/js/edit_map.js"></script>
 </body>

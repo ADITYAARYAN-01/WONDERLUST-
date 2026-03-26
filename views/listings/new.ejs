@@ -8,69 +8,27 @@
       <form method="post" action="/listings" novalidate class="needs-validation" enctype="multipart/form-data">
         <div class="mb-3">
           <label for="title" class="form-label">Title</label>
-          <input 
-            type="text" 
-            name="listing[title]" 
-            placeholder="e.g., Cozy Beachfront Villa" 
-            class="form-control"
-            required
-          >
-          <div class="valid-feedback">TITLE LOOKS GOOD!!</div>
+          <input type="text" name="listing[title]" placeholder="e.g., Cozy Beachfront Villa" class="form-control" required>
         </div>
 
         <div class="mb-3">
           <label for="description" class="form-label">Description</label>
-          <textarea 
-            name="listing[description]" 
-            placeholder="Write a short, catchy description about your property..."
-            class="form-control"
-            rows="4"
-            required
-          ></textarea>
-          <div class="invalid-feedback">Please enter a short description</div>
+          <textarea name="listing[description]" placeholder="Write a description..." class="form-control" rows="3" required></textarea>
         </div>
 
         <div class="mb-3">
-          <label for="image" class="form-label">Image URL</label>
-          <input 
-            type="text" 
-            name="listing[image]" 
-            placeholder="Paste a valid image link (e.g., https://example.com/image.jpg)" 
-            class="form-control"
-          >
-        </div>
-        <div class="mb-3">
           <label for="image" class="form-label">Upload Listing Image</label>
-          <input 
-            type="file" 
-            name="listing[image]" 
-            class="form-control"
-          >
+          <input type="file" name="listing[image]" class="form-control" required>
         </div>
 
         <div class="row">
-          <div class="mb-3 col-md-8">
-            <label for="price" class="form-label">Price (in USD)</label>
-            <input 
-              name="listing[price]" 
-              placeholder="e.g., 150 per night" 
-              class="form-control"
-              min="0"
-              required
-            >
-            <div class="invalid-feedback">PLEASE ENTER A VALID PRICE</div>
-          </div>
-
           <div class="mb-3 col-md-4">
+            <label for="price" class="form-label">Price (in USD)</label>
+            <input name="listing[price]" placeholder="150" class="form-control" min="0" required>
+          </div>
+          <div class="mb-3 col-md-8">
             <label for="country" class="form-label">Country</label>
-            <input 
-              type="text" 
-              name="listing[country]" 
-              placeholder="e.g., United States" 
-              class="form-control"
-              required
-            >
-            <div class="invalid-feedback">Country name should be valid </div>
+            <input type="text" name="listing[country]" placeholder="India" class="form-control" required>
           </div>
         </div>
 
@@ -79,12 +37,20 @@
           <input 
             type="text" 
             name="listing[location]" 
-            placeholder="e.g., Miami, Florida" 
-            class="form-control"
+            id="location-input" 
+            placeholder="e.g., Jagamara, Bhubaneswar" 
+            class="form-control" 
             required
           >
-          <div class="invalid-feedback">Location should be valid</div>
+          <div class="invalid-feedback">Please provide a valid location.</div>
+          
+          <div id="map-preview" style="height: 300px; width: 100%; border-radius: 10px; margin-top: 10px; border: 1px solid #ddd;"></div>
+          <small class="text-muted">Tip: Drag the marker to the exact location of your property.</small>
         </div>
+
+        <input type="hidden" name="listing[geometry][coordinates][0]" id="lng-input">
+        <input type="hidden" name="listing[geometry][coordinates][1]" id="lat-input">
+        <input type="hidden" name="listing[geometry][type]" value="Point">
 
         <div class="d-grid">
           <button class="btn addbtn mb-3" type="submit">Add Listing</button>
@@ -92,5 +58,9 @@
       </form>
     </div>
   </div>
+
+  <script>
+    const mapToken = "<%= process.env.MAP_TOKEN %>";
+  </script>
+  <script src="/js/new_map.js"></script>
 </body>
- 

@@ -8,7 +8,12 @@ module.exports.listingSchema = Joi.object({
         country : Joi.string().required(),
         price : Joi.number().required().min(0),
         image : Joi.string().allow("", null),
+        geometry: Joi.object({
+            type: Joi.string().valid('Point').required(),
+            coordinates: Joi.array().items(Joi.number()).length(2).required()
+        }).required()
     }).required()
+    
 })
 
 module.exports.reviewSchema = Joi.object({
