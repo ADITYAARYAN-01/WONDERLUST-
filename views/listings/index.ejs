@@ -3,13 +3,23 @@
     <style>
         #filters {
             display: flex;
-            flex-wrap: wrap;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        #filter-scroll {
+            display: flex;
+            flex-wrap: nowrap;
+            align-items: center;
+            gap: 1rem;
+            overflow-x: auto;
+            padding-bottom: 0.5rem;
+            flex: 1;
         }
 
         .filter {
             text-align: center;
-            margin-right: 2rem;
-            margin-top: 2rem;
+            flex: 0 0 auto;
             opacity: 0.7;
         }
 
@@ -18,8 +28,9 @@
             cursor: pointer;
         }
 
-        .filter p{
+        .filter p {
             font-size: 0.8rem;
+            margin-bottom: 0;
         }
     </style>
 
@@ -32,55 +43,62 @@
 
 
         <div id="filters">
-            <div class="filter">
-                <div><i class="fa-solid fa-fire"></i>
-                    <p>Trending</p>
+            <div id="filter-scroll">
+                <div class="filter">
+                    <div><i class="fa-solid fa-fire"></i>
+                        <p>Trending</p>
+                    </div>
                 </div>
-            </div>
 
-            <div class="filter">
-                <div><i class="fa-solid fa-bed"></i>
-                    <p>Rooms</p>
+                <div class="filter">
+                    <div><i class="fa-solid fa-bed"></i>
+                        <p>Rooms</p>
+                    </div>
                 </div>
-            </div>
 
-            <div class="filter">
-                <div><i class="fa-solid fa-mountain-city"></i>
-                    <p>Mountain City</p>
+                <div class="filter">
+                    <div><i class="fa-solid fa-mountain-city"></i>
+                        <p>Mountain City</p>
+                    </div>
                 </div>
-            </div>
-            <div class="filter">
-                <div><i class="fa-solid fa-mountain"></i>
-                    <p>Mountain</p>
+                <div class="filter">
+                    <div><i class="fa-solid fa-mountain"></i>
+                        <p>Mountain</p>
+                    </div>
                 </div>
-            </div>
-            <div class="filter">
-                <div><i class="fa-brands fa-fort-awesome"></i>
-                    <p>Castle</p>
+                <div class="filter">
+                    <div><i class="fa-brands fa-fort-awesome"></i>
+                        <p>Castle</p>
+                    </div>
                 </div>
-            </div>
-            <div class="filter">
-                <div><i class="fa-solid fa-person-swimming"></i>
-                    <p>Pool</p>
+                <div class="filter">
+                    <div><i class="fa-solid fa-person-swimming"></i>
+                        <p>Pool</p>
+                    </div>
                 </div>
-            </div>
-            <div class="filter">
-                <div><i class="fa-solid fa-fire-burner"></i>
-                    <p>Camping</p>
+                <div class="filter">
+                    <div><i class="fa-solid fa-fire-burner"></i>
+                        <p>Camping</p>
+                    </div>
                 </div>
-            </div>
-            <div class="filter">
-                <div><i class="fa-solid fa-cow"></i>
-                    <p>Farms</p>
+                <div class="filter">
+                    <div><i class="fa-solid fa-cow"></i>
+                        <p>Farms</p>
+                    </div>
                 </div>
-            </div>
-            <div class="filter">
-                <div><i class="fa-regular fa-snowflake"></i>
-                    <p>Arctic</p>
+                <div class="filter">
+                    <div><i class="fa-regular fa-snowflake"></i>
+                        <p>Arctic</p>
+                    </div>
                 </div>
-            </div>
-            
 
+            </div>
+            <div class="tax-toggle flex-shrink-0">
+                <div class="form-check-reverse form-switch">
+                    <input class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault">
+                    <label class="form-check-label" for="switchCheckDefault">Display total after Taxes</label>
+                </div>
+            </div>
         </div>
 
 
@@ -107,4 +125,11 @@
                 </a>
                 <%}%>
         </div>
+
+        <script>
+            let taxSwitch = document.getElementById("switchCheckDefault");
+            taxSwitch.addEventListener("click", () => {
+                console.log("Clicked")
+            })
+        </script>
     </body>
