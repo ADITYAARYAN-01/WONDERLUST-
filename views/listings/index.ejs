@@ -1,14 +1,91 @@
 <% layout("/layouts/boilerplate") %>
 
+    <style>
+        #filters {
+            display: flex;
+            flex-wrap: wrap;
+        }
 
+        .filter {
+            text-align: center;
+            margin-right: 2rem;
+            margin-top: 2rem;
+            opacity: 0.7;
+        }
 
-<body>
-        <h2>ALL LISTINGS</h2>
+        .filter:hover {
+            opacity: 1;
+            cursor: pointer;
+        }
+
+        .filter p{
+            font-size: 0.8rem;
+        }
+    </style>
+
+    <body>
+        <!-- <h2>ALL LISTINGS</h2> -->
 
         <!-- <form method ="GET"action="/listings/new">
         <button>Create new Listing</button>
     </form> -->
-        <div class="row row-cols-lg-3 row-cols-md-2  row-cols-sm-1 row-cols-xs-1">
+
+
+        <div id="filters">
+            <div class="filter">
+                <div><i class="fa-solid fa-fire"></i>
+                    <p>Trending</p>
+                </div>
+            </div>
+
+            <div class="filter">
+                <div><i class="fa-solid fa-bed"></i>
+                    <p>Rooms</p>
+                </div>
+            </div>
+
+            <div class="filter">
+                <div><i class="fa-solid fa-mountain-city"></i>
+                    <p>Mountain City</p>
+                </div>
+            </div>
+            <div class="filter">
+                <div><i class="fa-solid fa-mountain"></i>
+                    <p>Mountain</p>
+                </div>
+            </div>
+            <div class="filter">
+                <div><i class="fa-brands fa-fort-awesome"></i>
+                    <p>Castle</p>
+                </div>
+            </div>
+            <div class="filter">
+                <div><i class="fa-solid fa-person-swimming"></i>
+                    <p>Pool</p>
+                </div>
+            </div>
+            <div class="filter">
+                <div><i class="fa-solid fa-fire-burner"></i>
+                    <p>Camping</p>
+                </div>
+            </div>
+            <div class="filter">
+                <div><i class="fa-solid fa-cow"></i>
+                    <p>Farms</p>
+                </div>
+            </div>
+            <div class="filter">
+                <div><i class="fa-regular fa-snowflake"></i>
+                    <p>Arctic</p>
+                </div>
+            </div>
+            
+
+        </div>
+
+
+
+        <div class="row row-cols-lg-3 row-cols-md-2  row-cols-sm-1 row-cols-xs-1 mt-3">
             <% for(let listings of allListings){ %>
                 <a href="/listings/<%= listings._id %>" class="listing-link">
                     <div class="card col listing-cards">
